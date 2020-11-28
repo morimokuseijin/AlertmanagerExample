@@ -1,7 +1,5 @@
 package com.morimoku.alertmanagerexample;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
@@ -10,6 +8,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.time.LocalTime;
 import java.util.Calendar;
@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
                 //Date has no problem!
                 Calendar calendar1 = dateToCalendar(calendar);
                 long calendar_long = calendar1.getTimeInMillis();
+                Date calendar_human = calendar1.getTime();
 
                 Intent intent = new Intent(getApplicationContext(),
                         AlarmNotice.class);
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
                        calendar_long, Toast.LENGTH_SHORT).show();
 
                 Log.v("time", String.valueOf(calendar_long));
+                Log.v("time", String.valueOf(calendar_human));
             }
 
         });
