@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
                     am.setExact(AlarmManager.RTC_WAKEUP, calendar_long, pending);
                 }
                 Toast.makeText(getApplicationContext(),"Your set time is"+
-                       calendar_long, Toast.LENGTH_SHORT).show();
+                       calendar_human, Toast.LENGTH_SHORT).show();
 
                 Log.v("time", String.valueOf(calendar_long));
                 Log.v("time", String.valueOf(calendar_human));
