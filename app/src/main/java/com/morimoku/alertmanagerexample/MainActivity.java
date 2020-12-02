@@ -17,12 +17,14 @@ import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button button,button2;
+    Button button, button2;
+    Calendar calendar1;
 
     private static Date localTimeToDate(LocalTime localTime) {
         Calendar calendar = Calendar.getInstance();
         calendar.clear();
-        calendar.set(0, 0, 0, localTime.getHour(), localTime.getMinute(), localTime.getSecond());
+        calendar.set(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DATE), localTime.getHour(), localTime.getMinute(), localTime.getSecond());
+        Log.v("timeInfo", Calendar.getInstance().get(Calendar.YEAR) + "." + Calendar.getInstance().get(Calendar.MONTH) + "." + Calendar.getInstance().get(Calendar.DATE));
         return calendar.getTime();
 
     }
@@ -43,10 +45,13 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LocalTime now = LocalTime.now().plusMinutes(10);
+                LocalTime now = LocalTime.now().plusMinutes(1);
+                Log.v("time1", String.valueOf(now));
                 Date calendar = localTimeToDate(now);
                 //Date has no problem!
+                Log.v("time2", String.valueOf(calendar));
                 Calendar calendar1 = dateToCalendar(calendar);
+                Log.v("time3", String.valueOf(calendar1.getTime()));
                 long calendar_long = calendar1.getTimeInMillis();
                 Date calendar_human = calendar1.getTime();
                 Intent intent = new Intent(getApplicationContext(),
@@ -68,25 +73,25 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Calendar calendar = Calendar.getInstance();
-                // Calendarを使って現在の時間をミリ秒で取得
+                // Get the current time by millis from calendar.
                 calendar.setTimeInMillis(System.currentTimeMillis());
-                // 5秒後に設定
+                // Setting in 5 seconds
                 calendar.add(Calendar.MINUTE, 1);
 
-                //明示的なBroadCast
+                //explicit broadcast Receiver
                 Intent intent = new Intent(getApplicationContext(),
                         AlarmNotice.class);
                 PendingIntent pending = PendingIntent.getBroadcast(
                         getApplicationContext(), 0, intent, 0);
 
-                // アラームをセットする
+                // setting alarm
                 AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
-                if(am != null){
+                if (am != null) {
                     am.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pending);
 
                     Toast.makeText(getApplicationContext(),
-                            "Set Alarm "+calendar.getTime(), Toast.LENGTH_SHORT).show();
-                    Log.v("time","Set Alarm "+calendar.getTime());
+                            "Set Alarm " + calendar.getTime(), Toast.LENGTH_SHORT).show();
+                    Log.v("time", "Set Alarm " + calendar.getTime());
                 }
             }
         });
