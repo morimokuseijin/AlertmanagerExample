@@ -17,7 +17,7 @@ import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button button;
+    Button button,button2;
 
     private static Date localTimeToDate(LocalTime localTime) {
         Calendar calendar = Calendar.getInstance();
@@ -38,11 +38,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         button = findViewById(R.id.button);
+        button2 = findViewById(R.id.button_easy);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LocalTime now = LocalTime.now().plusMinutes(5);
+                LocalTime now = LocalTime.now().plusMinutes(10);
                 Date calendar = localTimeToDate(now);
                 //Date has no problem!
                 Calendar calendar1 = dateToCalendar(calendar);
@@ -62,6 +63,32 @@ public class MainActivity extends AppCompatActivity {
                 Log.v("time", String.valueOf(calendar_human));
             }
 
+        });
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar calendar = Calendar.getInstance();
+                // Calendarを使って現在の時間をミリ秒で取得
+                calendar.setTimeInMillis(System.currentTimeMillis());
+                // 5秒後に設定
+                calendar.add(Calendar.MINUTE, 1);
+
+                //明示的なBroadCast
+                Intent intent = new Intent(getApplicationContext(),
+                        AlarmNotice.class);
+                PendingIntent pending = PendingIntent.getBroadcast(
+                        getApplicationContext(), 0, intent, 0);
+
+                // アラームをセットする
+                AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
+                if(am != null){
+                    am.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pending);
+
+                    Toast.makeText(getApplicationContext(),
+                            "Set Alarm "+calendar.getTime(), Toast.LENGTH_SHORT).show();
+                    Log.v("time","Set Alarm "+calendar.getTime());
+                }
+            }
         });
     }
 }
